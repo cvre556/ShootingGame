@@ -1,36 +1,35 @@
+ï»¿
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class Enemy : MonoBehaviour
 {
-    Vector3 dir;
-    GameObject player;
     public float speed = 5;
-
-    // Æø¹ß °øÀå 
+    // í­ë°œ ê³µì¥ 
     public GameObject explosionFactory;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private Vector3 dir;
+
     void Start()
     {
-        int rndValue = UnityEngine.Random.Range(0, 10);
-
+        // 30% í™•ë¥ ë¡œ í”Œë ˆì´ì–´ ì¶”ì , ì•„ë‹ˆë©´ ì•„ë˜ë¡œ ì´ë™
+        int rndValue = Random.Range(0, 10);
         if (rndValue <= 3)
         {
             GameObject target = GameObject.Find("Player");
-
-            dir = target.transform.position - transform.position;
-
-            dir.Normalize(); // ¹æÇâ Å©±â¸¦ 1·Î ÇÏ°í ½ÍÀ» ¶§
+            if (target != null)
+            {
+                dir = (target.transform.position - transform.position).normalized;
+            }
+            else
+            {
+                dir = Vector3.down; // ê¸°ë³¸ ì´ë™ ë°©í–¥ìœ¼ë¡œ ì„¤ì •
+            }
         }
-        else
-        {
-            dir = Vector3.down;
-            //transform.position += dir * speed * Time.deltaTime;
-        }
+
+        dir = Vector3.down;
+
     }
 
-    // Update is called once per frame
     void Update()
     {
         transform.position += dir * speed * Time.deltaTime;
@@ -38,36 +37,35 @@ public class Enemy : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        //¾À¿¡¼­ ÀâÀ» ¶§¸¶³ª ÇöÀç Á¡¼ö¸¦ Ç¥½Ã
-        // 1. ¾À¿¡¼­ SceneManger °´Ã¼¸¦ Ã£¾Æ¿Â´Ù
+        //ì”¬ì—ì„œ ì¡ì„ ë•Œë§ˆë‚˜ í˜„ì¬ ì ìˆ˜ë¥¼ í‘œì‹œ
+        // 1. ì”¬ì—ì„œ SceneManger ê°ì²´ë¥¼ ì°¾ì•„ì˜¨ë‹¤\
+        // 2. ScoreManager ê²Œì„ ì˜¤ë¸Œì íŠ¸ë¥¼ ì–»ì–´ì˜¨ë‹¤    
+        // 3. ScoreManager ì†ì„± ê°’ì„ ê°€ì ¸ì˜¨ë‹¤.
         GameObject smObject = GameObject.Find("ScoreManager");
-        // 2. ScoreManager °ÔÀÓ ¿ÀºêÁ§Æ®¸¦ ¾ò¾î¿Â´Ù
-        ScoreManager sm = smObject.GetComponent<ScoreManager>();
-        // 3. ScoreManager ¼Ó¼º °ªÀ» °¡Á®¿Â´Ù.
-        // sm.currentScore++;
-        sm.SetScore(10);
-
-        GameObject explosion = Instantiate(explosionFactory);
-
-        explosion.transform.position = transform.position;
-
-        // ³Ê Á×°í
-        Destroy(collision.gameObject);
-        // ³ª Á×ÀÚ
-        Destroy(gameObject);
-
-        /*
-        if (sm.currentScore > sm.bestScore)
+        if (smObject != null)
         {
-            sm.bestScore = sm.currentScore;
-
-            sm.BestScoreUI.text = "ÃÖ°í Á¡¼ö : " + sm.bestScore;
-
-            PlayerPrefs.SetInt("Best Score", sm.bestScore);
+            ScoreManager sm = smObject.GetComponent<ScoreManager>();
+            sm.SetScore(10);
         }
-        */
 
+        // í­ë°œ ì´í™íŠ¸ ìƒì„±
+        if (explosionFactory != null)
+        {
+            Instantiate(explosionFactory, transform.position, Quaternion.identity);
+        }
+
+        // ì¶©ëŒí•œ ì˜¤ë¸Œì íŠ¸ì™€ ìì‹  ì œê±°
+        Destroy(collision.gameObject);
+        Destroy(gameObject);
     }
-
-
 }
+/*
+       if (sm.currentScore > sm.bestScore)
+       {
+           sm.bestScore = sm.currentScore;
+
+           sm.BestScoreUI.text = "ìµœê³  ì ìˆ˜ : " + sm.bestScore;
+
+           PlayerPrefs.SetInt("Best Score", sm.bestScore);
+       }
+*/

@@ -1,40 +1,32 @@
+﻿
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerHeart : MonoBehaviour
 {
-    int heart = 3;
+    int heart = 1;
+    public bool isGameOver = false;
 
-    public bool isGameOver;
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        if (isGameOver == true)
-        {
-            return;
-        }
-
-        if (heart == 2 || heart == 1)
+        if (!isGameOver && (heart == 2 || heart == 1))
         {
             transform.Rotate(0, 0, 30 * Time.deltaTime);
         }
     }
 
-
     private void OnCollisionEnter(Collision collision)
     {
-        heart -= 1;
+        heart--;
 
 
         if (heart == 0)
         {
+            isGameOver = true;
+
+            SceneManager.LoadScene("GameOverScene");
             Destroy(gameObject);
         }
+
     }
 }

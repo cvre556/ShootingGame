@@ -24,6 +24,8 @@ public class EnemyManager : MonoBehaviour
     {
         // 태어날 때 적의 생성 시간을 설정
         createTime = UnityEngine.Random.Range(minTime, maxTime);
+
+
     }
 
     // Update is called once per frame
