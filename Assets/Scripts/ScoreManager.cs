@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class ScoreManager : MonoBehaviour
@@ -12,9 +12,11 @@ public class ScoreManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        bestScore = PlayerPrefs.GetInt("Best Score", 0);
+        currentScore = 0; 
 
+        bestScore = PlayerPrefs.GetInt("Best Score", 0);
         BestScoreUI.text = "Best Score : " + bestScore;
+        CurrentScoreUI.text = "Current Score : 0";
     }
 
     // Update is called once per frame
@@ -25,7 +27,7 @@ public class ScoreManager : MonoBehaviour
 
     public void SetScore(int value)
     {
-        currentScore++;
+        currentScore += value;
 
         CurrentScoreUI.text = "Current Score : " + currentScore;
 
@@ -35,6 +37,7 @@ public class ScoreManager : MonoBehaviour
             BestScoreUI.text = "Best Score : " + bestScore;
 
             PlayerPrefs.SetInt("Best Score", bestScore);
+            PlayerPrefs.Save();
         }
     }
 

@@ -34,5 +34,6 @@ public class PlayerMove : MonoBehaviour
     private void LateUpdate()
     {
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, stageData.LimitMin.x, stageData.LimitMax.x), Mathf.Clamp(transform.position.y, stageData.LimitMin.y, stageData.LimitMax.y));
+        transform.rotation = Quaternion.identity;
     }
 }

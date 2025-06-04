@@ -40,12 +40,12 @@ public class Enemy : MonoBehaviour
     {
         //씬에서 잡을 때마나 현재 점수를 표시
         // 1. 씬에서 SceneManger 객체를 찾아온다
-        GameObject smObject = GameObject.Find("ScoreManger");
+        GameObject smObject = GameObject.Find("ScoreManager");
         // 2. ScoreManager 게임 오브젝트를 얻어온다
         ScoreManager sm = smObject.GetComponent<ScoreManager>();
         // 3. ScoreManager 속성 값을 가져온다.
         // sm.currentScore++;
-        sm.SetScore(sm.GetScore() + 1);
+        sm.SetScore(10);
 
         GameObject explosion = Instantiate(explosionFactory);
 
@@ -68,5 +68,6 @@ public class Enemy : MonoBehaviour
         */
 
     }
+
 
 }

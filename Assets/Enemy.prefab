@@ -117,6 +117,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   explosionFactory: {fileID: 2433282508537954060, guid: 3ef3ae421f71c5c4e97fe12dc2fc6312, type: 3}
+  explosionEffect: {fileID: 3912117259330914278, guid: edb83108a0b882c4380f38f7483aa23b, type: 3}
 --- !u!54 &7715447007863656471
 Rigidbody:
   m_ObjectHideFlags: 0
