@@ -1,26 +1,26 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using System.Collections;
+using System.Collections; 
 
 public class PlayerHeart : MonoBehaviour
 {
     public int hp = 3;
     public Text hpText;
-    public float invincibleDuration = 1f;
-    private bool isInvincible = false;
-
-    private SpriteRenderer spriteRenderer;
+    private Renderer[] renderers;
+    private bool isBlinking = false;
 
     private void Start()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>(); // 수정됨
         UpdateHpUI();
+
+        
+        renderers = GetComponentsInChildren<Renderer>();
     }
 
     public void TakeDamage(int damage)
     {
-        if (isInvincible) return;
+        if (isBlinking) return; 
 
         hp -= damage;
         UpdateHpUI();
@@ -32,7 +32,7 @@ public class PlayerHeart : MonoBehaviour
         }
         else
         {
-            StartCoroutine(InvincibilityCoroutine());
+            StartCoroutine(BlinkEffect());
         }
     }
 
@@ -44,26 +44,32 @@ public class PlayerHeart : MonoBehaviour
         }
     }
 
-
-    IEnumerator InvincibilityCoroutine()
+    IEnumerator BlinkEffect()
     {
-        isInvincible = true;
+        isBlinking = true;
 
-        float elapsed = 0f;
-        Color originalColor = spriteRenderer.color;
+        float blinkDuration = 1f;
+        float blinkInterval = 0.2f;
+        float timer = 0f;
 
-        while (elapsed < invincibleDuration)
+        while (timer < blinkDuration)
         {
-            Color c = spriteRenderer.color;
-            c.a = (c.a == 1f) ? 0.3f : 1f;
-            spriteRenderer.color = c;
-
-            yield return new WaitForSeconds(0.1f);
-            elapsed += 0.1f;
+            SetRenderersVisible(false);
+            yield return new WaitForSeconds(blinkInterval);
+            SetRenderersVisible(true);
+            yield return new WaitForSeconds(blinkInterval);
+            timer += blinkInterval * 2;
         }
 
-        spriteRenderer.color = originalColor;
-        isInvincible = false;
+        SetRenderersVisible(true);
+        isBlinking = false;
     }
 
+    void SetRenderersVisible(bool visible)
+    {
+        foreach (Renderer r in renderers)
+        {
+            r.enabled = visible;
+        }
+    }
 }
